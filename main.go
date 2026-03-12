@@ -107,7 +107,37 @@ func handlePostFighter(w http.ResponseWriter, r *http.Request) {
 	//se genera un nuevo ID para el nuevo luchador y se agrega a la lista de luchadores
 	newFighter.ID = generateNextID()
 	fighters = append(fighters, newFighter)
+	saveTeams()
+
 	writeJSON(w, http.StatusCreated, newFighter)
+}
+
+// funcion para generar el id del nuevo luchador
+// se recorre la lista  de luchadores hasta encontrar el ID mas alto y se le suma 1 para generar el nuevo ID
+func generateNextID() int {
+	maxID := 0
+	for _, fighter := range fighters {
+		if fighter.ID > maxID {
+			maxID = fighter.ID
+		}
+	}
+
+	return maxID + 1
+}
+
+// funcion para guardar los luchadores en el archivo JSON
+func saveFighters() {
+	data, err := json.MarshalIndent(fighters, "", " ")
+	if err != nil {
+		log.Println("Error marshaling JSON:", err)
+		return
+	}
+
+	err = os.WriteFile("data/teams.json", data, 0644)
+	if err != nil {
+		log.Println("Error writing JSON file:", err)
+	}
+
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
