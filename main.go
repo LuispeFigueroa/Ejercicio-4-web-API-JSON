@@ -30,11 +30,14 @@ func main() {
 	http.HandleFunc("/api/ping", pingHandler)
 	http.HandleFunc("/api/Fighters", fightersHandler)
 
+	log.Println("Servidor iniciado en http://localhost:24087")
+	log.Fatal(http.ListenAndServe(":24087", nil))
+
 }
 
 // funcion para cargar el archivo JSON con los lucadores usando os
 func loadFighters() {
-	file, err := os.ReadFile("/data/fighters.json")
+	file, err := os.ReadFile("data/fighters.json")
 
 	if err != nil {
 		log.Fatal("Error al leer el archivo JSON: ", err)
@@ -53,22 +56,33 @@ func pingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func fightersHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
+	switch r.Method {
+	case http.MethodGet:
+		handleGetFighter(w, r)
+	case http.MethodPost:
+		handlePostFighter(w, r)
+	case http.MethodPatch:
+		handlePatchFighter(w, r)
+	default:
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+// handler para manejtar todos las request de tipo GET
+func handleGetFighter(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	idParam := query.Get("id")
-	if idParam == "" {
+
+	if idParam != "" {
 		writeJSON(w, http.StatusOK, fighters)
 		return
 	}
+
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-
 	for _, fighter := range fighters {
 		if fighter.ID == id {
 			writeJSON(w, http.StatusOK, fighter)
@@ -76,6 +90,24 @@ func fightersHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	http.Error(w, "Fighter not found", http.StatusNotFound)
+}
+
+func handlePostFighter(w http.ResponseWriter, r *http.Request) {
+	var newFighter Fighter
+	err := json.NewDecoder(r.Body).Decode(&newFighter)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+	//si alguno de los campos no esta completo, se devuelve un error y se solicita que llene todos los campos
+	if newFighter.Name == "" || newFighter.Country == "" || newFighter.Record == "" || newFighter.Specialty == "" || newFighter.Height == "" {
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+	//se genera un nuevo ID para el nuevo luchador y se agrega a la lista de luchadores
+	newFighter.ID = generateNextID()
+	fighters = append(fighters, newFighter)
+	writeJSON(w, http.StatusCreated, newFighter)
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {

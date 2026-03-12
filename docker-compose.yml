@@ -3,6 +3,6 @@ services:
   go-server:
     build: .
     ports:
-      - "24087:8080"
+      - "24087:24087"
     volumes:
       - .:/app
