@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Ilia topuria",
-        "country": "Spain",
+        "country": "Brazil",
         "record": "11-0-0",
         "specialty": "Striking",
         "height": "1.70 m"
@@ -78,5 +78,13 @@
         "record": "20-2-0",
         "specialty": "Striking",
         "height": "1.75 m"
+    },
+    {
+        "id": 11,
+        "name": "Conor McGregor",
+        "country": "Ireland",
+        "record": "22-6-0",
+        "specialty": "Striking",
+        "height": "1.75m"
     }
 ]
