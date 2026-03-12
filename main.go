@@ -72,24 +72,51 @@ func fightersHandler(w http.ResponseWriter, r *http.Request) {
 func handleGetFighter(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	idParam := query.Get("id")
+	nameParam := query.Get("name")
+	countryParam := query.Get("country")
+	recordParam := query.Get("record")
+	specialtyParam := query.Get("specialty")
+	heightParam := query.Get("height")
 
-	if idParam == "" {
-		writeJSON(w, http.StatusOK, fighters)
-		return
-	}
+	var results []Fighter
 
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		return
-	}
-	for _, fighter := range fighters {
-		if fighter.ID == id {
-			writeJSON(w, http.StatusOK, fighter)
+	var id int
+	var err error
+
+	if idParam != "" {
+		id, err = strconv.Atoi(idParam)
+		if err != nil {
+			http.Error(w, "Invalid ID", http.StatusBadRequest)
 			return
 		}
 	}
-	http.Error(w, "Fighter not found", http.StatusNotFound)
+	for _, fighter := range fighters {
+
+		if idParam != "" && fighter.ID != id {
+			continue
+		}
+		if nameParam != "" && fighter.Name != nameParam {
+			continue
+		}
+		if countryParam != "" && fighter.Country != countryParam {
+			continue
+		}
+		if specialtyParam != "" && fighter.Specialty != specialtyParam {
+			continue
+		}
+		if recordParam != "" && fighter.Record != recordParam {
+			continue
+		}
+		if heightParam != "" && fighter.Height != heightParam {
+			continue
+		}
+		results = append(results, fighter)
+	}
+	if len(results) == 0 {
+		http.Error(w, "No fighters found", http.StatusNotFound)
+		return
+	}
+	writeJSON(w, http.StatusOK, results)
 }
 
 func handlePostFighter(w http.ResponseWriter, r *http.Request) {
