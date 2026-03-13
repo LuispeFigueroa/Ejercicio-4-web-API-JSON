@@ -191,7 +191,7 @@ func handlePatchFighter(w http.ResponseWriter, r *http.Request) {
 	var updates map[string]interface{}
 	err = json.NewDecoder(r.Body).Decode(&updates)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "Invalid Request Body")
 		return
 	}
 	// se recorren todos los luchadores hasta encontrar el luchador con la ID proporcionada,
@@ -257,9 +257,9 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 
-	err := json.NewEncoder(w).Encode(payload)
-	if err != nil {
-		writeError(w, http.StatusInternalServerError, "Internal Server Error")
+	if err := json.NewEncoder(w).Encode(payload); err != nil {
+		//aqui hago el log del error en caso de que ocurra un error al codificar la respuesta JSON, pero no se devuelve un error al cliente porque ya se ha establecido el encabezado y el código de estado
+		log.Println("Error encoding JSON response: ", err)
 	}
 }
 
