@@ -64,6 +64,8 @@ func fightersHandler(w http.ResponseWriter, r *http.Request) {
 		handlePostFighter(w, r)
 	case http.MethodPatch:
 		handlePatchFighter(w, r)
+	case http.MethodDelete:
+		handleDeleteFighter(w, r)
 	default:
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
@@ -221,6 +223,30 @@ func handlePatchFighter(w http.ResponseWriter, r *http.Request) {
 
 			saveFighters()
 			writeJSON(w, http.StatusOK, fighters[i])
+			return
+		}
+	}
+	http.Error(w, "Fighter not found", http.StatusNotFound)
+}
+
+func handleDeleteFighter(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
+	idParam := query.Get("id")
+	if idParam == "" {
+		http.Error(w, "ID is required", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+	for i, fighter := range fighters {
+		if fighter.ID == id {
+			fighters = append(fighters[:i], fighters[i+1:]...)
+			saveFighters()
+			writeJSON(w, http.StatusOK, Message{Message: "Fighter deleted successfully"})
 			return
 		}
 	}
