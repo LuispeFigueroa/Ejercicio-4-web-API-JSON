@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Fighter struct {
@@ -90,28 +91,32 @@ func handleGetFighter(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	// recorremos todo el slice de luchadores
 	for _, fighter := range fighters {
-
+		// si se envio un ID, pero no es el mismo que este luchador, continuamos al siguiente. Esto se hace con cada paramtro que podria enviarse.
 		if idParam != "" && fighter.ID != id {
 			continue
 		}
-		if nameParam != "" && fighter.Name != nameParam {
+		//uso el EqualFold para comparar los strings sin que sea case sensitive
+		if nameParam != "" && !strings.EqualFold(fighter.Name, nameParam) {
 			continue
 		}
-		if countryParam != "" && fighter.Country != countryParam {
+		if countryParam != "" && !strings.EqualFold(fighter.Country, countryParam) {
 			continue
 		}
-		if specialtyParam != "" && fighter.Specialty != specialtyParam {
+		if specialtyParam != "" && !strings.EqualFold(fighter.Specialty, specialtyParam) {
 			continue
 		}
-		if recordParam != "" && fighter.Record != recordParam {
+		if recordParam != "" && !strings.EqualFold(fighter.Record, recordParam) {
 			continue
 		}
-		if heightParam != "" && fighter.Height != heightParam {
+		if heightParam != "" && !strings.EqualFold(fighter.Height, heightParam) {
 			continue
 		}
+		//cada vez que se encuentra un luchador que cumple con los parametros enviados, se agrega a la lista de resultados
 		results = append(results, fighter)
 	}
+	// si no se encuentra ningun luchador que cumpla con los parametros enviados, se devuelve un error indicando que no se encontraron luchadores
 	if len(results) == 0 {
 		http.Error(w, "No fighters found", http.StatusNotFound)
 		return
