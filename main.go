@@ -67,7 +67,7 @@ func fightersHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		handleDeleteFighter(w, r)
 	default:
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
 	}
 }
 
@@ -89,7 +89,7 @@ func handleGetFighter(w http.ResponseWriter, r *http.Request) {
 	if idParam != "" {
 		id, err = strconv.Atoi(idParam)
 		if err != nil {
-			http.Error(w, "Invalid ID", http.StatusBadRequest)
+			writeError(w, http.StatusBadRequest, "Invalid ID")
 			return
 		}
 	}
@@ -120,7 +120,7 @@ func handleGetFighter(w http.ResponseWriter, r *http.Request) {
 	}
 	// si no se encuentra ningun luchador que cumpla con los parametros enviados, se devuelve un error indicando que no se encontraron luchadores
 	if len(results) == 0 {
-		http.Error(w, "No fighters found", http.StatusNotFound)
+		writeError(w, http.StatusNotFound, "Fighter not found")
 		return
 	}
 	writeJSON(w, http.StatusOK, results)
@@ -130,12 +130,12 @@ func handlePostFighter(w http.ResponseWriter, r *http.Request) {
 	var newFighter Fighter
 	err := json.NewDecoder(r.Body).Decode(&newFighter)
 	if err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "Invalid request body")
 		return
 	}
 	//si alguno de los campos no esta completo, se devuelve un error y se solicita que llene todos los campos
 	if newFighter.Name == "" || newFighter.Country == "" || newFighter.Record == "" || newFighter.Specialty == "" || newFighter.Height == "" {
-		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "Missing required fields")
 		return
 	}
 	//se genera un nuevo ID para el nuevo luchador y se agrega a la lista de luchadores
@@ -178,13 +178,13 @@ func handlePatchFighter(w http.ResponseWriter, r *http.Request) {
 	idParam := query.Get("id")
 	//si no se proporciona un ID, se devuelve un error indicando que el ID es requerido
 	if idParam == "" {
-		http.Error(w, "ID is required", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "ID is required")
 		return
 	}
 	//se comprueba que la ID sea un numero valido y que exista en la lista de luchadores, si no se encuentra se devuelve un error indicando que el ID es invalido
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 	//se decodifica el cuerpo de la solicitud para obtener los campos que se desean actualizar, si el cuerpo de la solicitud no es un JSON valido se devuelve un error indicando que el cuerpo de la solicitud es invalido
@@ -226,20 +226,20 @@ func handlePatchFighter(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	http.Error(w, "Fighter not found", http.StatusNotFound)
+	writeError(w, http.StatusNotFound, "Fighter not found")
 }
 
 func handleDeleteFighter(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	idParam := query.Get("id")
 	if idParam == "" {
-		http.Error(w, "ID is required", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "ID is required")
 		return
 	}
 
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		writeError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 	for i, fighter := range fighters {
@@ -250,7 +250,7 @@ func handleDeleteFighter(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	http.Error(w, "Fighter not found", http.StatusNotFound)
+	writeError(w, http.StatusNotFound, "Fighter not found")
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
@@ -259,6 +259,11 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 
 	err := json.NewEncoder(w).Encode(payload)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		writeError(w, http.StatusInternalServerError, "Internal Server Error")
 	}
+}
+
+// funcion para regresar todos los errores como JSON
+func writeError(w http.ResponseWriter, status int, message string) {
+	writeJSON(w, status, map[string]string{"error": message})
 }
