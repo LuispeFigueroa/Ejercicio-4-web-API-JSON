@@ -1,82 +1,90 @@
 [
- {
-  "id": 1,
-  "name": "Ilia topuria",
-  "country": "Brazil",
-  "record": "11-0-0",
-  "specialty": "Striking",
-  "height": "1.70 m"
- },
- {
-  "id": 2,
-  "name": "Charles Oliveira",
-  "country": "Brazil",
-  "record": "34-9-0",
-  "specialty": "Brazilian Jiu-Jitsu",
-  "height": "1.78 m"
- },
- {
-  "id": 3,
-  "name": "Islam Makhachev",
-  "country": "Russia",
-  "record": "24-1-0",
-  "specialty": "wrestling",
-  "height": "1.78 m"
- },
- {
-  "id": 4,
-  "name": "Justin Gaethje",
-  "country": "USA",
-  "record": "25-4-0",
-  "specialty": "Striking",
-  "height": "1.80 m"
- },
- {
-  "id": 5,
-  "name": "Dustin Poirier",
-  "country": "USA",
-  "record": "28-7-0",
-  "specialty": "Striking",
-  "height": "1.80 m"
- },
- {
-  "id": 7,
-  "name": "Arman Tsarukyan",
-  "country": "Armenia",
-  "record": "21-3-0",
-  "specialty": "Wrestling",
-  "height": "1.70 m"
- },
- {
-  "id": 8,
-  "name": "Paddy Pimblett",
-  "country": "UK",
-  "record": "23-4-0",
-  "specialty": "Striking",
-  "height": "1.78 m"
- },
- {
-  "id": 9,
-  "name": "Rafael dos Anjos",
-  "country": "Brazil",
-  "record": "30-13-0",
-  "specialty": "Brazilian Jiu-Jitsu",
-  "height": "1.80 m"
- },
- {
-  "id": 10,
-  "name": "Max Holloway",
-  "country": "USA",
-  "record": "20-2-0",
-  "specialty": "Striking",
-  "height": "1.75 m"
- },
- {
-  "id": 11,
-  "name": "Conor McGregor",
-  "country": "Ireland",
-  "record": "22-6-0",
-  "specialty": "Striking",
-  "height": "1.75m"
- }
+    {
+        "id": 1,
+        "name": "Alexander Volkanovski",
+        "country": "Australia",
+        "record": "25-1-0",
+        "specialty": "Striking",
+        "height": "1.73 m"
+    },
+    {
+        "id": 2,
+        "name": "Charles Oliveira",
+        "country": "Brazil",
+        "record": "34-9-0",
+        "specialty": "Brazilian Jiu-Jitsu",
+        "height": "1.78 m"
+    },
+    {
+        "id": 3,
+        "name": "Islam Makhachev",
+        "country": "Russia",
+        "record": "24-1-0",
+        "specialty": "wrestling",
+        "height": "1.78 m"
+    },
+    {
+        "id": 4,
+        "name": "Justin Gaethje",
+        "country": "USA",
+        "record": "25-4-0",
+        "specialty": "Striking",
+        "height": "1.80 m"
+    },
+    {
+        "id": 5,
+        "name": "Dustin Poirier",
+        "country": "USA",
+        "record": "28-7-0",
+        "specialty": "Striking",
+        "height": "1.80 m"
+    },
+    {
+        "id": 7,
+        "name": "Arman Tsarukyan",
+        "country": "Armenia",
+        "record": "21-3-0",
+        "specialty": "Wrestling",
+        "height": "1.70 m"
+    },
+    {
+        "id": 8,
+        "name": "Paddy Pimblett",
+        "country": "UK",
+        "record": "23-4-0",
+        "specialty": "Striking",
+        "height": "1.78 m"
+    },
+    {
+        "id": 9,
+        "name": "Rafael dos Anjos",
+        "country": "Brazil",
+        "record": "30-13-0",
+        "specialty": "Brazilian Jiu-Jitsu",
+        "height": "1.80 m"
+    },
+    {
+        "id": 10,
+        "name": "Max Holloway",
+        "country": "USA",
+        "record": "20-2-0",
+        "specialty": "Striking",
+        "height": "1.75 m"
+    },
+    {
+        "id": 11,
+        "name": "Conor McGregor",
+        "country": "Ireland",
+        "record": "22-6-0",
+        "specialty": "Striking",
+        "height": "1.75m"
+    },
+    {
+        "id": 11,
+        "name": "Alex Pereira",
+        "country": "Brazil",
+        "record": "22-6-0",
+        "specialty": "Striking",
+        "height": "1.80m"
+    }
 ]

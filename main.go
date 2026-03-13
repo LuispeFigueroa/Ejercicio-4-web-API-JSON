@@ -30,6 +30,7 @@ func main() {
 
 	http.HandleFunc("/api/ping", pingHandler)
 	http.HandleFunc("/api/Fighters", fightersHandler)
+	http.HandleFunc("/api/Fighters/", fightersHandler)
 
 	log.Println("Servidor iniciado en http://localhost:24087")
 	log.Fatal(http.ListenAndServe(":24087", nil))
@@ -57,6 +58,16 @@ func pingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func fightersHandler(w http.ResponseWriter, r *http.Request) {
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/Fighters/")
+
+	if path == r.URL.Path {
+		//si hay algo despues de /api/Fighters/ se asume que es un ID y se agrega a la query string para que el handler de GET pueda manejarlo,
+		// si no hay nada despues de /api/Fighters/ se asume que se quieren obtener todos los luchadores y no se agrega nada a la query string
+	} else if path != "" {
+		r.URL.RawQuery = "id=" + path
+	}
+
 	switch r.Method {
 	case http.MethodGet:
 		handleGetFighter(w, r)
