@@ -28,6 +28,8 @@ GET /api/Fighters?country=Brazil&specialty=Grappling
 - Crear un nuevo fighter:
 POST /api/Fighters
 
+
+
 - actualizar datos de un luchador
 PATCH /api/Fighters?id=1
 
